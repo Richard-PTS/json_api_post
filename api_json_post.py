@@ -12,7 +12,7 @@ json_data = ""
 log_file = ""
 
 # Load config from config.json
-with open('config.json') as config_data:
+with open('config.json', 'r') as config_data:
     # ToDo: Error handeling
     auth = HTTPBasicAuth('apikey', config_data['auth-key'])
     api_url = config_data['apiURL']
@@ -20,7 +20,7 @@ with open('config.json') as config_data:
     log_file = config_data['logFile']
 
 # Load the json data to send in the request
-with open(json_file) as json_file_data:
+with open(json_file, 'r') as json_file_data:
     # ToDo: Error handeling 
     json_data = json.load(json_file_data)
 
@@ -35,12 +35,12 @@ def LogAttempt(result):
 
 def SendRequest():
     tries = 1
-    r = MakeRequest()
-    while r['status_code'] != requests.codes.ok:
+    result = MakeRequest()
+    while result['status_code'] != requests.codes.ok:
         if tries > 4:
             break
         tries = tries + 1
-        r = MakeRequest()
+        result = MakeRequest()
 
 def MakeRequest():
     startTime = time.time()
