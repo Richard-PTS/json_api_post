@@ -57,7 +57,7 @@ def MakeRequest():
         r = requests.post(api_url, json=json_data, auth=auth, timeout=15)
         endTime = time.time()
         elapsed = round(endTime - startTime, 5)
-        res = {'status_code' : r.status_code, "elapsed":elapsed}
+        res = {'status_code' : r.status_code, "elapsed" : elapsed}
     except:
         res = {'status_code' : 0, "elapsed" : 0}
         LogWrite("There was an error sending the request!")
