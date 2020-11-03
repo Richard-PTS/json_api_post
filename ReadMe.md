@@ -6,3 +6,7 @@ This script performs a simgle task, to submit JSON data to an API with an Authen
 * authentication key
 * the json file that is to be sent to the API
 * log file where the script will log it's activity
+
+## Requirements
+
+* Requests <https://pypi.org/project/requests/>
