@@ -23,11 +23,12 @@ with open('config.json', 'r') as config_file_data:
 with open(json_file, 'r') as json_file_data:
     json_data = json.load(json_file_data)
 
+# Confirm critical information has been provided in the configuration file
 if (auth == "" or api_url == "" or json_file == ""):
     # Log an error if something is missing
     LogWrite("Critical Information has not been defined in config.json. Request not sent!")
 else:
-    # Execute request, log results, retry up to 5 times
+    # Execute request
     SendRequest()
 
 # Functions    
@@ -41,6 +42,7 @@ def LogWrite(log_message):
         logFile.write(now + " | " + log_message)
 
 def SendRequest():
+    # retry up to 5 times
     tries = 1
     result = MakeRequest()
     while result['status_code'] != requests.codes.ok:
@@ -60,5 +62,5 @@ def MakeRequest():
         res = {'status_code' : 0, "elapsed" : 0}
         LogWrite("There was an error sending the request!")
 
-    LogAttempt(res)
+    LogAttempt(res) # Log the results of the request
     return res
