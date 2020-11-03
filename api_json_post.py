@@ -12,7 +12,8 @@ json_data = ""
 log_file = ""
 
 # Load config from config.json
-with open('config.json', 'r') as config_data:
+with open('config.json', 'r') as config_file_data:
+    config_data = json.load(config_file_data)
     auth = HTTPBasicAuth('apikey', config_data['auth-key'])
     api_url = config_data['apiURL']
     json_file = config_data['jsonFile']
