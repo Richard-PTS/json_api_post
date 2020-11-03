@@ -9,7 +9,7 @@ auth = ""
 api_url = ""
 json_file = ""
 json_data = ""
-log_file = "logFile.log"
+log_file = ""
 
 # Load config from config.json
 with open('config.json') as config_data:
