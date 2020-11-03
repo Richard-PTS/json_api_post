@@ -29,6 +29,8 @@ SendRequest()
 
 # Functions    
 def LogAttempt(result):
+    if (log_file == ""):return
+    # If no log file is specified, do not log anything
     with open(log_file, "a") as logFile:
         now = datetime.now()
         logFile.write(now + " | " + result['elapsed'] + "s | " + result['status_code'] + "\n")
