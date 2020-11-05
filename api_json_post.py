@@ -19,7 +19,7 @@ def LogWrite(log_message):
     if (log_file == ""):return
     now = datetime.now()
     with open(log_file, "a") as logFile:
-        logFile.write(now + " | " + log_message)
+        logFile.write(now.strftime("%m/%d/%y, %H:%M:%s") + " | " + log_message)
 
 def SendRequest():
     # retry up to 5 times
@@ -34,11 +34,12 @@ def SendRequest():
 def MakeRequest():
     try:
         startTime = time.time()
-        r = requests.post(api_url + ',key=' + auth, json=json_data, auth=auth, timeout=15)
+        r = requests.post(api_url, json=json_data, auth=auth)
         endTime = time.time()
         elapsed = round(endTime - startTime, 5)
         res = {'status_code' : r.status_code, "elapsed" : elapsed}
-    except:
+    except requests.exceptions.HTTPError as e:
+        print(e)
         res = {'status_code' : 0, "elapsed" : 0}
         LogWrite("There was an error sending the request!")
 
@@ -48,7 +49,7 @@ def MakeRequest():
 # Load config from config.json
 with open('config.json', 'r') as config_file_data:
     config_data = json.load(config_file_data)
-    auth = config_data[0]['auth-key']
+    auth = HTTPBasicAuth("apikey", config_data[0]['auth-key'])
     api_url = config_data[0]['apiURL']
     json_file = config_data[0]['jsonFile']
     log_file = config_data[0]['logFile']
