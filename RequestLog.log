@@ -1,0 +1,5 @@
+11/05/20, 14:34:1604608462 | SET: api_url:	<requests.auth.HTTPBasicAuth object at 0x7fc0a7623b38>11/05/20, 14:34:1604608462 | SET: json_file:	/var/mitto/data/control_tower_report.jsonl11/05/20, 14:34:1604608462 | SET: log_file:	RequestLog.log11/05/20, 14:34:1604608462 | Starting Attempt 111/05/20, 14:34:1604608463 | 0.73258s | 500
+11/05/20, 14:34:1604608467 | Starting Attempt 211/05/20, 14:34:1604608468 | 0.73547s | 500
+11/05/20, 14:34:1604608477 | Starting Attempt 311/05/20, 14:34:1604608478 | 0.73684s | 500
+11/05/20, 14:34:1604608494 | Starting Attempt 411/05/20, 14:34:1604608494 | 0.86817s | 500
+11/05/20, 14:35:1604608520 | Starting Attempt 511/05/20, 14:35:1604608520 | 0.75641s | 500

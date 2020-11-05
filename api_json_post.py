@@ -11,41 +11,54 @@ json_file = ""
 json_data = ""
 log_file = ""
 
-# Functions    
+# Functions
 def LogAttempt(result):
-    LogWrite(result['elapsed'] + "s | " + result['status_code'] + "\n")
+    LogWrite(str(result['elapsed']) + "s | " + str(result['status_code']) + "\n")
 
 def LogWrite(log_message):
     if (log_file == ""):return
     now = datetime.now()
     with open(log_file, "a") as logFile:
-        logFile.write(now.strftime("%m/%d/%y, %H:%M:%s") + " | " + log_message)
+        mes = now.strftime("%m/%d/%y, %H:%M:%s") + " | " + log_message
+        logFile.write(mes)
+        print(mes)
 
 def SendRequest():
     # retry up to 5 times
     tries = 1
+    LogWrite('Starting Attempt ' + str(tries))
     result = MakeRequest()
     while result['status_code'] != requests.codes.ok:
         if tries > 4:
             break
         tries = tries + 1
+        time.sleep(tries*tries)
+        LogWrite('Starting Attempt ' + str(tries))
         result = MakeRequest()
 
 def MakeRequest():
+    res = {'status_code':"", 'elapsed':""}
+    startTime = time.time()
+
     try:
-        startTime = time.time()
-        r = requests.post(api_url, json=json_data, auth=auth)
-        endTime = time.time()
-        elapsed = round(endTime - startTime, 5)
-        res = {'status_code' : r.status_code, "elapsed" : elapsed}
-    except requests.exceptions.HTTPError as e:
-        print(e)
-        res = {'status_code' : 0, "elapsed" : 0}
-        LogWrite("There was an error sending the request!")
+        r = requests.post(api_url, auth=auth)
+        res['status_code'] = r.status_code
+        print(r.text)
+    except urllib3.exceptions.ProtocolError:
+        LogWrite('EXCEPTION: urllib3.exceptions.ProtocolError')
+        res['status_code'] = 0
+    except requests.exceptions.HTTPError:
+        res['status_code'] = 0
+        LogWrite("EXCEPTION: request.exceptions.HTTPError")
+    except:
+        LogWrite("EXCEPTION: Unknows")
+
+    endTime = time.time()
+    elapsed = round(endTime - startTime, 5)
+    res['elapsed'] = elapsed
 
     LogAttempt(res) # Log the results of the request
     return res
-    
 
 # Load config from config.json
 with open('config.json', 'r') as config_file_data:
@@ -54,6 +67,11 @@ with open('config.json', 'r') as config_file_data:
     api_url = config_data[0]['apiURL']
     json_file = config_data[0]['jsonFile']
     log_file = config_data[0]['logFile']
+
+# Debug view
+LogWrite('SET: api_url:\t' + str(auth))
+LogWrite('SET: json_file:\t' + json_file)
+LogWrite('SET: log_file:\t' + log_file + '\n')
 
 # Load the json data to send in the request
 with open(json_file, 'r') as json_file_data:
