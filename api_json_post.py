@@ -45,6 +45,7 @@ def MakeRequest():
 
     LogAttempt(res) # Log the results of the request
     return res
+    
 
 # Load config from config.json
 with open('config.json', 'r') as config_file_data:
