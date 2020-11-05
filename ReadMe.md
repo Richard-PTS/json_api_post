@@ -1,6 +1,6 @@
 # Read Me: api_json_post.py
 
-This script performs a simgle task, to submit JSON data to an API with an Authentication Key. The configuration file 'config.json' includes all the available options. These are:
+This script performs a single task, to submit JSON data to an API with an Authentication Key. The configuration file 'config.json' includes all the available options. These are:
 
 * API URL
 * authentication key
