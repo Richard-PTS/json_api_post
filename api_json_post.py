@@ -11,6 +11,8 @@ json_file = ""
 json_data = ""
 log_file = ""
 
+showDebug = True
+
 # Functions
 def LogAttempt(result):
     LogWrite(str(result['elapsed']) + "s | " + str(result['status_code']) + "\n")
@@ -20,8 +22,8 @@ def LogWrite(log_message):
     now = datetime.now()
     with open(log_file, "a") as logFile:
         mes = now.strftime("%m/%d/%y, %H:%M:%s") + " | " + log_message
-        logFile.write(mes)
-        print(mes)
+        logFile.write(mes + '\n')
+        if showDebug: print(mes)
 
 def SendRequest():
     # retry up to 5 times
@@ -43,7 +45,7 @@ def MakeRequest():
     try:
         r = requests.post(api_url, auth=auth)
         res['status_code'] = r.status_code
-        print(r.text)
+        LogWrite(r.text)
     except urllib3.exceptions.ProtocolError:
         LogWrite('EXCEPTION: urllib3.exceptions.ProtocolError')
         res['status_code'] = 0
@@ -51,7 +53,7 @@ def MakeRequest():
         res['status_code'] = 0
         LogWrite("EXCEPTION: request.exceptions.HTTPError")
     except:
-        LogWrite("EXCEPTION: Unknows")
+        LogWrite("EXCEPTION: Unknown exemption")
 
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
@@ -69,7 +71,7 @@ with open('config.json', 'r') as config_file_data:
     log_file = config_data[0]['logFile']
 
 # Debug view
-LogWrite('SET: api_url:\t' + str(auth))
+LogWrite('SET: api_url:\t' + api_url)
 LogWrite('SET: json_file:\t' + json_file)
 LogWrite('SET: log_file:\t' + log_file + '\n')
 
