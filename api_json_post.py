@@ -11,26 +11,6 @@ json_file = ""
 json_data = ""
 log_file = ""
 
-# Load config from config.json
-with open('config.json', 'r') as config_file_data:
-    config_data = json.load(config_file_data)
-    auth = HTTPBasicAuth('apikey', config_data['auth-key'])
-    api_url = config_data['apiURL']
-    json_file = config_data['jsonFile']
-    log_file = config_data['logFile']
-
-# Load the json data to send in the request
-with open(json_file, 'r') as json_file_data:
-    json_data = json.load(json_file_data)
-
-# Confirm critical information has been provided in the configuration file
-if (auth == "" or api_url == "" or json_file == ""):
-    # Log an error if something is missing
-    LogWrite("Critical Information has not been defined in config.json. Request not sent!")
-else:
-    # Execute request
-    SendRequest()
-
 # Functions    
 def LogAttempt(result):
     LogWrite(result['elapsed'] + "s | " + result['status_code'] + "\n")
@@ -54,7 +34,7 @@ def SendRequest():
 def MakeRequest():
     try:
         startTime = time.time()
-        r = requests.post(api_url, json=json_data, auth=auth, timeout=15)
+        r = requests.post(api_url + ',key=' + auth, json=json_data, auth=auth, timeout=15)
         endTime = time.time()
         elapsed = round(endTime - startTime, 5)
         res = {'status_code' : r.status_code, "elapsed" : elapsed}
@@ -64,3 +44,24 @@ def MakeRequest():
 
     LogAttempt(res) # Log the results of the request
     return res
+
+# Load config from config.json
+with open('config.json', 'r') as config_file_data:
+    config_data = json.load(config_file_data)
+    auth = config_data[0]['auth-key']
+    api_url = config_data[0]['apiURL']
+    json_file = config_data[0]['jsonFile']
+    log_file = config_data[0]['logFile']
+
+# Load the json data to send in the request
+with open(json_file, 'r') as json_file_data:
+    for line in json_file_data:
+        json_data = json_data + line
+
+# Confirm critical information has been provided in the configuration file
+if (auth == "" or api_url == "" or json_file == ""):
+    # Log an error if something is missing
+    LogWrite("Critical Information has not been defined in config.json. Request not sent!")
+else:
+    # Execute request
+    SendRequest()
