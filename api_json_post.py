@@ -1,5 +1,6 @@
 from requests.auth import HTTPBasicAuth
 import requests
+from requests_jwt import JWTAuth
 import json
 from datetime import datetime
 import time
@@ -27,24 +28,30 @@ def LogWrite(log_message):
 
 def SendRequest():
     # retry up to 5 times
-    tries = 1
-    LogWrite('Starting Attempt ' + str(tries))
-    result = MakeRequest()
+    tries = 4 #to force only 1 attempt during testing
+    LogWrite('Starting Attempt with test json data')
+    result = MakeRequest("{'data':'test'}")
     while result['status_code'] != requests.codes.ok:
         if tries > 4:
             break
         tries = tries + 1
         time.sleep(tries*tries)
-        LogWrite('Starting Attempt ' + str(tries))
-        result = MakeRequest()
+        LogWrite('Starting Attempt with no data sent')
+        result = MakeRequest(json_data)
 
-def MakeRequest():
+def MakeRequest(request_data):
     res = {'status_code':"", 'elapsed':""}
     startTime = time.time()
+    headers = {'Auth-key': auth}
 
     try:
-        r = requests.post(api_url, auth=auth)
+        r = requests.post(api_url, headers=headers, json="[{'data':'stuff'}]")
         res['status_code'] = r.status_code
+        print('\nResponse Headers\n')
+        print(r.headers)
+        print('\n\nRequest Headers\n')
+        print(r.request.headers)
+        print('\n')
         LogWrite(r.text)
     except urllib3.exceptions.ProtocolError:
         LogWrite('EXCEPTION: urllib3.exceptions.ProtocolError')
@@ -65,7 +72,7 @@ def MakeRequest():
 # Load config from config.json
 with open('config.json', 'r') as config_file_data:
     config_data = json.load(config_file_data)
-    auth = HTTPBasicAuth("apikey", config_data[0]['auth-key'])
+    auth = config_data[0]['auth-key']
     api_url = config_data[0]['apiURL']
     json_file = config_data[0]['jsonFile']
     log_file = config_data[0]['logFile']
