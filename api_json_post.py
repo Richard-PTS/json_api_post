@@ -52,7 +52,7 @@ def MakeRequest(request_data):
     headers = {'Auth-key': auth}
 
     try:
-        r = requests.post(api_url, headers=headers, json="[{'data':'stuff'}]")
+        r = requests.post(api_url, headers=headers, json=request_data)
         res['status_code'] = r.status_code
         print('\nResponse Headers\n')
         print(r.headers)
