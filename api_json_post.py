@@ -43,19 +43,16 @@ def MakeRequest(request_data):
     startTime = time.time()
     headers = {'Auth-key': auth, 'Content-Type':'application/json'}
 
-    try:
-        r = requests.post(api_url, headers=headers, data=request_data)
-        res['status_code'] = r.status_code
-        # print('\nResponse Headers\n')
-        # print(r.headers)
-        # print('\n\nRequest Headers\n')
-        # print(r.request.headers)
-        # print('\n\nRequest JSON\n')
-        # print(r.request.body)
-        # print('\n')
-        # LogWrite(r.text)
-    except:
-        LogWrite("EXCEPTION: Unknown exemption")
+    r = requests.post(api_url, headers=headers, data=request_data)
+    res['status_code'] = r.status_code
+    # print('\nResponse Headers\n')
+    # print(r.headers)
+    # print('\n\nRequest Headers\n')
+    # print(r.request.headers)
+    # print('\n\nRequest JSON\n')
+    # print(r.request.body)
+    # print('\n')
+    # LogWrite(r.text)
 
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
