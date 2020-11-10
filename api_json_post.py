@@ -1,4 +1,3 @@
-from requests.auth import HTTPBasicAuth
 import requests
 import json
 from datetime import datetime
@@ -9,7 +8,6 @@ import jsonlines # `pip install jsonlines`
 auth = ""
 api_url = ""
 jsonL_file = ""
-json_data = ""
 log_file = ""
 
 showDebug = True
@@ -30,25 +28,20 @@ def SendRequest():
     request_count = 0
     LogWrite('Starting Attempt Requests')
     with jsonlines.open(jsonL_file, "r") as reader:
-        for obj in reader:
+        for json_obj in reader:
             request_count = request_count + 1
-            LogWrite(str(request_count) + " | Send Dell Order#: " + obj['dellOrder'])
-            jsonD = '[' + json.dumps(obj) + ']'
+            LogWrite(str(request_count) + " | Send Dell Order#: " + json_obj['dellOrder'])
+            jsonD = '[' + json.dumps(json_obj) + ']'
             MakeRequest(jsonD)
     LogWrite('Requests Completed ' + request_count)
 
 def MakeRequest(request_data):
-    res = {'status_code':"", 'elapsed':""}
     startTime = time.time()
     headers = {'Auth-key': auth, 'Content-Type':'application/json'}
-
     r = requests.post(api_url, headers=headers, data=request_data)
-    res['status_code'] = r.status_code
-
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
-    res['elapsed'] = elapsed
-
+    res = {'status_code': r.status_code, 'elapsed':elapsed}
     LogAttempt(res) # Log the results of the request
     return res
 
