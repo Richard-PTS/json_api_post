@@ -10,3 +10,4 @@ This script performs a single task, to submit JSON data to an API with an Authen
 ## Requirements
 
 * Requests <https://pypi.org/project/requests/>
+* JSONLines <https://pypi.org/project/jsonlines/>
