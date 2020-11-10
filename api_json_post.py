@@ -32,9 +32,8 @@ def SendRequest():
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
             request_count = request_count + 1
+            LogWrite(request_count + " | Send Dell Order#: " + obj['dellOrder'])
             jsonD = '[' + json.dumps(obj) + ']'
-            # print('\nJSON Data\n')
-            # print(jsonD)
             MakeRequest(jsonD)
     LogWrite('Requests Completed ' + request_count)
 
@@ -45,14 +44,6 @@ def MakeRequest(request_data):
 
     r = requests.post(api_url, headers=headers, data=request_data)
     res['status_code'] = r.status_code
-    # print('\nResponse Headers\n')
-    # print(r.headers)
-    # print('\n\nRequest Headers\n')
-    # print(r.request.headers)
-    # print('\n\nRequest JSON\n')
-    # print(r.request.body)
-    # print('\n')
-    # LogWrite(r.text)
 
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
@@ -73,22 +64,6 @@ with open('config.json', 'r') as config_file_data:
 LogWrite('SET: api_url:\t' + api_url)
 LogWrite('SET: jsonL_file:\t' + jsonL_file)
 LogWrite('SET: log_file:\t' + log_file + '\n')
-
-# with jsonlines.open(jsonL_file, "r") as reader:
-#     for obj in reader:
-#         print('\n')
-#         print(obj)
-#         print('\n')
-#         print(obj['dellOrder'])
-#         print('\n')
-#         jsonD = json.dumps(obj)
-#         print(jsonD)
-#         break
-
-# Load the json data to send in the request
-# with jsonlines.open(jsonL_file) as json_file_data:
-    # for line in json_file_data:
-        # json_data = json_data + line
 
 # Confirm critical information has been provided in the configuration file
 if (auth == "" or api_url == "" or jsonL_file == ""):
