@@ -32,10 +32,9 @@ def SendRequest():
     LogWrite('Starting Attempt with test json data')
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
-            jsonD = '[' + json.dumps(obj) + ']'
-            print('\nJSON Data Start\n')
+            jsonD = json.dumps(obj)
+            print('\nJSON Data\n')
             print(jsonD)
-            print('\nJSON Data End\n')
             result = MakeRequest(jsonD)
             break
 
@@ -59,6 +58,8 @@ def MakeRequest(request_data):
         print(r.headers)
         print('\n\nRequest Headers\n')
         print(r.request.headers)
+        print('\n\nRequest JSON\n')
+        print(r.json)
         print('\n')
         LogWrite(r.text)
     except:
