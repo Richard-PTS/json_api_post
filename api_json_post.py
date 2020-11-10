@@ -59,7 +59,7 @@ def MakeRequest(request_data):
         print('\n\nRequest Headers\n')
         print(r.request.headers)
         print('\n\nRequest JSON\n')
-        print(r.json)
+        print(r.request.json)
         print('\n')
         LogWrite(r.text)
     except:
