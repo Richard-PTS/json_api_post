@@ -32,7 +32,11 @@ def SendRequest():
     LogWrite('Starting Attempt with test json data')
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
-            result = MakeRequest(json.dumps(obj))
+            jsonD = json.dumps(obj)
+            print('\nJSON Data Start\n')
+            print(jsonD)
+            print('\nJSON Data End\n')
+            result = MakeRequest(jsonD)
             break
 
     while result['status_code'] != requests.codes.ok:
