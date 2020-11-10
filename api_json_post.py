@@ -84,7 +84,7 @@ with jsonlines.open(jsonL_file, "r") as reader:
         print(obj['dellOrder'])
         print('\n')
         jsonD = json.dumps(obj)
-        print()
+        print(jsonD)
         break
 
 # Load the json data to send in the request
