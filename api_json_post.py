@@ -27,24 +27,16 @@ def LogWrite(log_message):
         if showDebug: print(mes)
 
 def SendRequest():
-    # retry up to 5 times
-    tries = 5 #to force only 1 attempt during testing
-    LogWrite('Starting Attempt 1')
+    request_count = 0
+    LogWrite('Starting Attempt Requests')
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
+            request_count = request_count + 1
             jsonD = '[' + json.dumps(obj) + ']'
             print('\nJSON Data\n')
             print(jsonD)
-            result = MakeRequest(jsonD)
-            break
-
-    while result['status_code'] != requests.codes.ok:
-        if tries > 4:
-            break
-        tries = tries + 1
-        time.sleep(tries*tries)
-        LogWrite('Starting Attempt ' + tries)
-        result = MakeRequest(json_data)
+            MakeRequest(jsonD)
+    LogWrite('Requests Completed ' + request_count)
 
 def MakeRequest(request_data):
     res = {'status_code':"", 'elapsed':""}
@@ -54,14 +46,14 @@ def MakeRequest(request_data):
     try:
         r = requests.post(api_url, headers=headers, data=request_data)
         res['status_code'] = r.status_code
-        print('\nResponse Headers\n')
-        print(r.headers)
-        print('\n\nRequest Headers\n')
-        print(r.request.headers)
-        print('\n\nRequest JSON\n')
-        print(r.request.body)
-        print('\n')
-        LogWrite(r.text)
+        # print('\nResponse Headers\n')
+        # print(r.headers)
+        # print('\n\nRequest Headers\n')
+        # print(r.request.headers)
+        # print('\n\nRequest JSON\n')
+        # print(r.request.body)
+        # print('\n')
+        # LogWrite(r.text)
     except:
         LogWrite("EXCEPTION: Unknown exemption")
 
