@@ -30,7 +30,11 @@ def SendRequest():
     # retry up to 5 times
     tries = 4 #to force only 1 attempt during testing
     LogWrite('Starting Attempt with test json data')
-    result = MakeRequest("{'data':'test'}")
+    with jsonlines.open(jsonL_file, "r") as reader:
+        for obj in reader:
+            result = MakeRequest(json.dumps(obj))
+            break
+
     while result['status_code'] != requests.codes.ok:
         if tries > 4:
             break
@@ -76,16 +80,16 @@ LogWrite('SET: api_url:\t' + api_url)
 LogWrite('SET: jsonL_file:\t' + jsonL_file)
 LogWrite('SET: log_file:\t' + log_file + '\n')
 
-with jsonlines.open(jsonL_file, "r") as reader:
-    for obj in reader:
-        print('\n')
-        print(obj)
-        print('\n')
-        print(obj['dellOrder'])
-        print('\n')
-        jsonD = json.dumps(obj)
-        print(jsonD)
-        break
+# with jsonlines.open(jsonL_file, "r") as reader:
+#     for obj in reader:
+#         print('\n')
+#         print(obj)
+#         print('\n')
+#         print(obj['dellOrder'])
+#         print('\n')
+#         jsonD = json.dumps(obj)
+#         print(jsonD)
+#         break
 
 # Load the json data to send in the request
 # with jsonlines.open(jsonL_file) as json_file_data:
