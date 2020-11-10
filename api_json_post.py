@@ -33,8 +33,8 @@ def SendRequest():
         for obj in reader:
             request_count = request_count + 1
             jsonD = '[' + json.dumps(obj) + ']'
-            print('\nJSON Data\n')
-            print(jsonD)
+            # print('\nJSON Data\n')
+            # print(jsonD)
             MakeRequest(jsonD)
     LogWrite('Requests Completed ' + request_count)
 
