@@ -84,7 +84,7 @@ with jsonlines.open(jsonL_file, "r") as reader:
         break
 
 # Load the json data to send in the request
-with open(jsonL_file, 'r') as json_file_data:
+with jsonlines.open(jsonL_file) as json_file_data:
     for line in json_file_data:
         json_data = json_data + line
 
