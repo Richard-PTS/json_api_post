@@ -76,7 +76,7 @@ LogWrite('SET: api_url:\t' + api_url)
 LogWrite('SET: jsonL_file:\t' + jsonL_file)
 LogWrite('SET: log_file:\t' + log_file + '\n')
 
-with jsonlines.open(jsonL_file, "w") as reader:
+with jsonlines.open(jsonL_file, "r") as reader:
     for obj in reader:
         print('\n')
         print(obj)
