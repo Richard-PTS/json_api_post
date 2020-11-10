@@ -32,7 +32,7 @@ def SendRequest():
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
             request_count = request_count + 1
-            LogWrite(request_count + " | Send Dell Order#: " + obj['dellOrder'])
+            LogWrite(str(request_count) + " | Send Dell Order#: " + obj['dellOrder'])
             jsonD = '[' + json.dumps(obj) + ']'
             MakeRequest(jsonD)
     LogWrite('Requests Completed ' + request_count)
