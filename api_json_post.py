@@ -81,12 +81,14 @@ with jsonlines.open(jsonL_file, "r") as reader:
         print('\n')
         print(obj)
         print('\n')
+        print(obj['dellOrder'])
+        print('\n')
         break
 
 # Load the json data to send in the request
-with jsonlines.open(jsonL_file) as json_file_data:
-    for line in json_file_data:
-        json_data = json_data + line
+# with jsonlines.open(jsonL_file) as json_file_data:
+    # for line in json_file_data:
+        # json_data = json_data + line
 
 # Confirm critical information has been provided in the configuration file
 if (auth == "" or api_url == "" or jsonL_file == ""):
