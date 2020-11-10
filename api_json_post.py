@@ -28,11 +28,11 @@ def LogWrite(log_message):
 
 def SendRequest():
     # retry up to 5 times
-    tries = 4 #to force only 1 attempt during testing
-    LogWrite('Starting Attempt with test json data')
+    tries = 5 #to force only 1 attempt during testing
+    LogWrite('Starting Attempt 1')
     with jsonlines.open(jsonL_file, "r") as reader:
         for obj in reader:
-            jsonD = json.dumps(obj)
+            jsonD = '[' + json.dumps(obj) + ']'
             print('\nJSON Data\n')
             print(jsonD)
             result = MakeRequest(jsonD)
@@ -43,23 +43,23 @@ def SendRequest():
             break
         tries = tries + 1
         time.sleep(tries*tries)
-        LogWrite('Starting Attempt with no data sent')
+        LogWrite('Starting Attempt ' + tries)
         result = MakeRequest(json_data)
 
 def MakeRequest(request_data):
     res = {'status_code':"", 'elapsed':""}
     startTime = time.time()
-    headers = {'Auth-key': auth}
+    headers = {'Auth-key': auth, 'Content-Type':'application/json'}
 
     try:
-        r = requests.post(api_url, headers=headers, json=request_data)
+        r = requests.post(api_url, headers=headers, data=request_data)
         res['status_code'] = r.status_code
         print('\nResponse Headers\n')
         print(r.headers)
         print('\n\nRequest Headers\n')
         print(r.request.headers)
         print('\n\nRequest JSON\n')
-        print(r.request.json)
+        print(r.request.body)
         print('\n')
         LogWrite(r.text)
     except:
