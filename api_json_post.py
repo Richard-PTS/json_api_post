@@ -20,7 +20,7 @@ def LogWrite(log_message):
     if (log_file == ""):return
     now = datetime.now()
     with open(log_file, "a") as logFile:
-        mes = now.strftime("%m/%d/%y, %H:%M:%s") + " | " + log_message
+        mes = now.strftime("%m/%d/%Y, %H:%M:%S") + " | " + log_message
         logFile.write(mes + '\n')
         if showDebug: print(mes)
 
@@ -33,12 +33,12 @@ def SendRequest():
             LogWrite(str(request_count) + " | Send Dell Order#: " + json_obj['dellOrder'])
             jsonD = [json_obj]#'[' + json.dumps(json_obj) + ']'
             MakeRequest(jsonD)
-    LogWrite('Requests Completed ' + request_count)
+    LogWrite('Requests Completed ' + str(request_count))
 
 def MakeRequest(request_data):
     startTime = time.time()
-    headers = {'Auth-key': auth}
-    r = requests.post(api_url, headers=headers, data=request_data)
+    headers = {'auth-key': auth}
+    r = requests.post(api_url, headers=headers, json=request_data)
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
     res = {'status_code': r.status_code, 'elapsed':elapsed}
@@ -48,10 +48,11 @@ def MakeRequest(request_data):
 # Load config from config.json
 with open('config.json', 'r') as config_file_data:
     config_data = json.load(config_file_data)
-    auth = config_data[0]['auth-key']
-    api_url = config_data[0]['apiURL']
-    jsonL_file = config_data[0]['jsonFile']
-    log_file = config_data[0]['logFile']
+    #print(config_data)
+    auth = config_data['auth-key']
+    api_url = config_data['apiURL']
+    jsonL_file = config_data['jsonFile']
+    log_file = config_data['logFile']
 
 # Debug view
 LogWrite('SET: api_url:\t' + api_url)
@@ -65,3 +66,4 @@ if (auth == "" or api_url == "" or jsonL_file == ""):
 else:
     # Execute request
     SendRequest()
+
