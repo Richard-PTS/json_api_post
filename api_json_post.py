@@ -31,13 +31,13 @@ def SendRequest():
         for json_obj in reader:
             request_count = request_count + 1
             LogWrite(str(request_count) + " | Send Dell Order#: " + json_obj['dellOrder'])
-            jsonD = '[' + json.dumps(json_obj) + ']'
+            jsonD = [json_obj]#'[' + json.dumps(json_obj) + ']'
             MakeRequest(jsonD)
     LogWrite('Requests Completed ' + request_count)
 
 def MakeRequest(request_data):
     startTime = time.time()
-    headers = {'Auth-key': auth, 'Content-Type':'application/json'}
+    headers = {'Auth-key': auth}
     r = requests.post(api_url, headers=headers, data=request_data)
     endTime = time.time()
     elapsed = round(endTime - startTime, 5)
