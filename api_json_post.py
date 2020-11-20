@@ -25,15 +25,16 @@ def LogWrite(log_message):
         if showDebug: print(mes)
 
 def SendRequest():
-    request_count = 0
-    LogWrite('Starting Attempt Requests')
+    LogWrite('Starting Request')
     with jsonlines.open(jsonL_file, "r") as reader:
+        records = []
         for json_obj in reader:
-            request_count = request_count + 1
-            LogWrite(str(request_count) + " | Send Dell Order#: " + json_obj['dellOrder'])
-            jsonD = [json_obj]#'[' + json.dumps(json_obj) + ']'
-            MakeRequest(jsonD)
-    LogWrite('Requests Completed ' + str(request_count))
+            LogWrite("Adding Dell Order#: " + json_obj['dellOrder'])
+            records.append(json_obj)
+        if len(records) > 0:
+            LogWrite("Sending Total Orders: " + str(len(records)))
+            MakeRequest(records)
+    LogWrite('Requests Completed')
 
 def MakeRequest(request_data):
     startTime = time.time()
