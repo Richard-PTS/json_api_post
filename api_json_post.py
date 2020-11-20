@@ -66,4 +66,3 @@ if (auth == "" or api_url == "" or jsonL_file == ""):
 else:
     # Execute request
     SendRequest()
-
