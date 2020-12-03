@@ -47,7 +47,7 @@ def MakeRequest(request_data):
     return res
 
 # Load config from config.json
-with open('config.json', 'r') as config_file_data:
+with open('/home/rpeterson/json_api_post/config.json', 'r') as config_file_data:
     config_data = json.load(config_file_data)
     #print(config_data)
     auth = config_data['auth-key']
